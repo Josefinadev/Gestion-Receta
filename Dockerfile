@@ -18,11 +18,19 @@ WORKDIR /var/www/html
 RUN curl -sS https://getcomposer.org/installer | php && \
     mv composer.phar /usr/local/bin/composer
 
-# Instala dependencias de Laravel
+# Instala dependencias
 RUN composer install --no-dev --optimize-autoloader
+
+# Aquí apuntamos a la carpeta correcta
+RUN rm -rf /var/www/html/index.html
+COPY . /var/www/html
+
+# Establece el DocumentRoot a public/
+RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
 
 # Permisos
 RUN chown -R www-data:www-data /var/www/html && chmod -R 755 /var/www/html
 
-# Puerto por defecto
 EXPOSE 80
+
+CMD ["apache2-foreground"]
