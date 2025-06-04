@@ -1,27 +1,34 @@
 services:
   - type: web
-    name: laravel-saya
-    env: docker
+    name: gestion-receta
+    env: php
     plan: free
-    dockerfilePath: ./Dockerfile
-    buildCommand: ""
-    startCommand: ""
+    buildCommand: composer install --no-dev --optimize-autoloader && php artisan migrate --force
+    startCommand: php artisan serve --host=0.0.0.0 --port=10000
     envVars:
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
-        value: false
+        value: 'false'
       - key: APP_KEY
-        value: TU_APP_KEY
+        value: base64:gKq/t+5q5GCgELLgN8s4v17ZlEUgatL8fSw9pz9APeo=
+      - key: APP_URL
+        value: https://tu-app.onrender.com
       - key: DB_CONNECTION
         value: mysql
       - key: DB_HOST
         value: db4free.net
       - key: DB_PORT
-        value: 3306
+        value: '3306'
       - key: DB_DATABASE
-        value: laravel_saya
+        value: gestion_receta
       - key: DB_USERNAME
-        value: josefina_user 
+        value: josefina_user
       - key: DB_PASSWORD
-        value: base64:oseRGfQOjnm0FHulzP9bYrZms4p+4xtfMgpVcLbumFQ=
+        value: josefina123
+      - key: SESSION_DRIVER
+        value: cookie
+      - key: CACHE_DRIVER
+        value: file
+      - key: QUEUE_CONNECTION
+        value: sync
